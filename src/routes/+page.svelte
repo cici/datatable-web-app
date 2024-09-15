@@ -5,5 +5,4 @@
 
 <div class="container mx-auto flex flex-col gap-12 py-10">
 	<DataTable />
-	<DataTable_2 />
 </div>

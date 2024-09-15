@@ -5,23 +5,33 @@
 	import { slide } from 'svelte/transition';
 	import { cubicOut } from 'svelte/easing';
 	import { data } from '$lib/data/sample';
+	import Arrow from '$lib/assets/icons/Arrow.svelte';
 
 	const table = createTable(readable(data));
 
 	const columns = table.createColumns([
 		table.column({
+			accessor: 'id',
+			header: '',
+			cell: ({ row }) => {
+				// Return the row's ID to use in the template
+				// @ts-ignore
+				return row.original.id;
+			}
+		}),
+		table.column({
 			accessor: 'index',
 			header: '#',
 			cell: ({ row }) => {
-				return expandedRow === row.original.id
-					? '▼ ' + row.original.index
-					: '▶ ' + row.original.index;
+				// @ts-ignore
+				return row.original.index;
 			}
 		}),
 		table.column({
 			accessor: 'venueName',
 			header: 'Venue Name',
 			cell: ({ row }) => {
+				// @ts-ignore
 				return `<a href="${row.original.venueLink}" class="text-blue-600 hover:underline">${row.original.venueName}</a>`;
 			}
 		}),
@@ -29,6 +39,7 @@
 			accessor: 'projectManager',
 			header: 'PM',
 			cell: ({ row }) => {
+				// @ts-ignore
 				return `<img src="${row.original.projectManager.avatar}" alt="${row.original.projectManager.name}" class="w-8 h-8 rounded-full" />`;
 			}
 		}),
@@ -36,11 +47,13 @@
 			accessor: 'status',
 			header: 'Status',
 			cell: ({ row }) => {
+				// @ts-ignore
 				const statusColors = {
 					'On track': 'bg-green-100 text-green-800',
 					'On hold': 'bg-yellow-100 text-yellow-800',
 					'At risk': 'bg-red-100 text-red-800'
 				};
+				// @ts-ignore
 				return `<span class="px-2 py-1 rounded-full text-xs font-semibold ${statusColors[row.original.status]}">${row.original.status}</span>`;
 			}
 		}),
@@ -48,6 +61,7 @@
 			accessor: 'showDate',
 			header: 'Show Date',
 			cell: ({ row }) => {
+				// @ts-ignore
 				const date = new Date(row.original.showDate);
 				return date.toLocaleDateString('en-US', {
 					day: 'numeric',
@@ -65,10 +79,10 @@
 	const { headerRows, pageRows, tableAttrs, tableBodyAttrs } = table.createViewModel(columns);
 
 	// Variable to track the expanded row
-	let expandedRow: number | null = null;
+	let expandedRow: string | null = null;
 
 	// Function to toggle row expansion
-	function toggleRow(id: number) {
+	function toggleRow(id: string) {
 		if (expandedRow === id) {
 			expandedRow = null; // Collapse if the same row is clicked
 		} else {
@@ -99,8 +113,10 @@
 		</Table.Header>
 		<Table.Body {...$tableBodyAttrs}>
 			{#each $pageRows as row (row.id)}
+				<!-- @ts-ignore -->
 				<Subscribe rowAttrs={row.attrs()} let:rowAttrs>
 					<!-- Main Row -->
+					<!-- @ts-ignore -->
 					<Table.Row
 						{...rowAttrs}
 						on:click={() => toggleRow(row.original.id)}
@@ -109,13 +125,23 @@
 						{#each row.cells as cell (cell.id)}
 							<Subscribe attrs={cell.attrs()} let:attrs>
 								<Table.Cell {...attrs}>
-									{@html cell.render()}
+									{#if cell.id === 'id'}
+										<Arrow
+											size={16}
+											class="{expandedRow === row.original.id
+												? 'rotate-90'
+												: ''} transform transition-transform duration-200"
+										/>
+									{:else}
+										{@html cell.render()}
+									{/if}
 								</Table.Cell>
 							</Subscribe>
 						{/each}
 					</Table.Row>
 
 					<!-- Expanded Content Row -->
+					<!-- @ts-ignore -->
 					{#if expandedRow === row.original.id}
 						<Table.Row>
 							<Table.Cell colspan={numColumns} class="p-0">
@@ -125,8 +151,8 @@
 								>
 									<!-- Song Timeline -->
 									<div class="p-4">
-										<h3 class="mb-2 text-lg font-bold">Song Timeline</h3>
 										<ul class="space-y-4">
+											<!-- @ts-ignore -->
 											{#each row.original.songs as song}
 												<li class="border-b pb-2">
 													<div class="flex items-center justify-between">
