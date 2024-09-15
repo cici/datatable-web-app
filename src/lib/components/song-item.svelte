@@ -16,13 +16,20 @@
 		{/if}
 	</div>
 	<div class="flex w-full flex-row justify-between">
-		<div class="flex flex-col gap-1">
+		<div class="flex flex-col gap-1 pb-4">
 			<span class=" font-bold">{song.title}</span>
+
+			<div class="flex flex-wrap gap-1 md:hidden">
+				{#each song.tags as tag}
+					<span class="tag h-fit whitespace-nowrap px-2 py-0.5 text-xs">{tag}</span>
+				{/each}
+			</div>
+
 			{#if song.note}
-				<p class="pb-4 text-sm text-gray-600">{song.note}</p>
+				<p class=" text-sm text-gray-600">{song.note}</p>
 			{/if}
 		</div>
-		<div class="flex">
+		<div class="hidden md:flex">
 			{#each song.tags as tag}
 				<span class="tag h-fit px-3 py-1">{tag}</span>
 			{/each}

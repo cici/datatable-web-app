@@ -90,7 +90,7 @@
 	const { headerRows, pageRows, tableAttrs, tableBodyAttrs, pluginStates } =
 		table.createViewModel(columns);
 
-	const { hasNextPage, hasPreviousPage, pageIndex } = pluginStates.page;
+	const { hasNextPage, hasPreviousPage, pageIndex, pageCount } = pluginStates.page;
 
 	// Variable to track the expanded row
 	let expandedRow: string | null = null;
@@ -141,7 +141,7 @@
 					>
 						{#each row.cells as cell (cell.id)}
 							<Subscribe attrs={cell.attrs()} let:attrs>
-								<Table.Cell {...attrs}>
+								<Table.Cell class="py-2.5" {...attrs}>
 									{#if cell.id === 'id'}
 										<Arrow
 											size={16}
@@ -176,19 +176,24 @@
 		</Table.Body>
 	</Table.Root>
 </div>
-<div class="flex items-center justify-end space-x-4 py-4">
-	<Button
-		variant="outline"
-		size="sm"
-		on:click={() => ($pageIndex = $pageIndex - 1)}
-		disabled={!$hasPreviousPage}>Previous</Button
-	>
-	<Button
-		variant="outline"
-		size="sm"
-		disabled={!$hasNextPage}
-		on:click={() => ($pageIndex = $pageIndex + 1)}>Next</Button
-	>
+<div class="flex items-center justify-between py-4">
+	<div class="text-sm opacity-30">
+		Page {$pageIndex + 1} of {$pageCount}
+	</div>
+	<div class="flex items-center justify-end space-x-4 py-4">
+		<Button
+			variant="outline"
+			size="sm"
+			on:click={() => ($pageIndex = $pageIndex - 1)}
+			disabled={!$hasPreviousPage}>Previous</Button
+		>
+		<Button
+			variant="outline"
+			size="sm"
+			disabled={!$hasNextPage}
+			on:click={() => ($pageIndex = $pageIndex + 1)}>Next</Button
+		>
+	</div>
 </div>
 
 <style>
