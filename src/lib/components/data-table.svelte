@@ -7,8 +7,11 @@
 	import { data } from '$lib/data/sample';
 	import Arrow from '$lib/assets/icons/Arrow.svelte';
 	import SongItem from './song-item.svelte';
-
-	const table = createTable(readable(data));
+	import { addPagination } from 'svelte-headless-table/plugins';
+	import { Button } from '$lib/components/ui/button';
+	const table = createTable(readable(data), {
+		page: addPagination({ initialPageSize: 5 })
+	});
 
 	const columns = table.createColumns([
 		table.column({
@@ -84,7 +87,10 @@
 		})
 	]);
 
-	const { headerRows, pageRows, tableAttrs, tableBodyAttrs } = table.createViewModel(columns);
+	const { headerRows, pageRows, tableAttrs, tableBodyAttrs, pluginStates } =
+		table.createViewModel(columns);
+
+	const { hasNextPage, hasPreviousPage, pageIndex } = pluginStates.page;
 
 	// Variable to track the expanded row
 	let expandedRow: string | null = null;
@@ -169,6 +175,20 @@
 			{/each}
 		</Table.Body>
 	</Table.Root>
+</div>
+<div class="flex items-center justify-end space-x-4 py-4">
+	<Button
+		variant="outline"
+		size="sm"
+		on:click={() => ($pageIndex = $pageIndex - 1)}
+		disabled={!$hasPreviousPage}>Previous</Button
+	>
+	<Button
+		variant="outline"
+		size="sm"
+		disabled={!$hasNextPage}
+		on:click={() => ($pageIndex = $pageIndex + 1)}>Next</Button
+	>
 </div>
 
 <style>
