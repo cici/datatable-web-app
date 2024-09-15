@@ -15,7 +15,6 @@
 			accessor: 'id',
 			header: '',
 			cell: ({ row }) => {
-				// Return the row's ID to use in the template
 				// @ts-ignore
 				return row.original.id;
 			}
@@ -33,7 +32,7 @@
 			header: 'Venue Name',
 			cell: ({ row }) => {
 				// @ts-ignore
-				return `<a href="${row.original.venueLink}" class="text-blue-600 hover:underline">${row.original.venueName}</a>`;
+				return `<a href="${row.original.venueLink}" class="text-blue-600 whitespace-nowrap">${row.original.venueName}</a>`;
 			}
 		}),
 		table.column({
@@ -41,7 +40,7 @@
 			header: 'PM',
 			cell: ({ row }) => {
 				// @ts-ignore
-				return `<img src="${row.original.projectManager.avatar}" alt="${row.original.projectManager.name}" class="w-8 h-8 rounded-full" />`;
+				return `<img src="https://api.dicebear.com/9.x/initials/svg?backgroundColor=b6e3f4,c0aede,d1d4f9&scale=90&seed=${row.original.projectManager.name}" alt="${row.original.projectManager.name}" class="w-6 h-6 rounded-md" />`;
 			}
 		}),
 		table.column({
@@ -55,7 +54,7 @@
 					'At risk': 'bg-red-100 text-red-800'
 				};
 				// @ts-ignore
-				return `<span class="px-2 py-1 rounded-full text-xs font-semibold ${statusColors[row.original.status]}">${row.original.status}</span>`;
+				return `<span class="px-2 py-1 rounded-full whitespace-nowrap text-xs font-semibold ${statusColors[row.original.status]}">${row.original.status}</span>`;
 			}
 		}),
 		table.column({
@@ -73,7 +72,15 @@
 		}),
 		table.column({
 			accessor: 'numberOfSongs',
-			header: 'Number of Songs'
+			header: 'Number of Songs',
+			cell: ({ row }) => {
+				// @ts-ignore
+				return `<div class="text-center">
+      <span class="px-2 py-1 rounded-md text-sm font-semibold bg-muted text-muted-foreground">
+        ${row.original.numberOfSongs}
+      </span>
+    </div>`;
+			}
 		})
 	]);
 
@@ -103,7 +110,10 @@
 					<Table.Row>
 						{#each headerRow.cells as cell (cell.id)}
 							<Subscribe attrs={cell.attrs()} let:attrs props={cell.props()}>
-								<Table.Head {...attrs}>
+								<Table.Head
+									{...attrs}
+									class=" whitespace-nowrap {cell.id === 'numberOfSongs' ? 'text-center' : ''}"
+								>
 									<Render of={cell.render()} />
 								</Table.Head>
 							</Subscribe>
@@ -131,7 +141,7 @@
 											size={16}
 											class="{expandedRow === row.original.id
 												? 'rotate-90'
-												: ''} transform transition-transform duration-200"
+												: ''} transform transition-transform duration-300"
 										/>
 									{:else}
 										{@html cell.render()}
@@ -141,22 +151,16 @@
 						{/each}
 					</Table.Row>
 
-					<!-- Expanded Content Row -->
-					<!-- @ts-ignore -->
 					{#if expandedRow === row.original.id}
 						<Table.Row>
 							<Table.Cell colspan={numColumns} class="p-0">
-								<div transition:slide={{ duration: 300, easing: cubicOut }} class="bg-muted">
-									<!-- Song Timeline -->
-									<div class="p-4">
-										<ul class="space-y-2">
-											<!-- @ts-ignore -->
-											{#each row.original.songs as song, i}
-												{@const isLast = i + 1 == row.original.songs.length ? true : false}
-												<SongItem {song} index={i} {isLast} />
-											{/each}
-										</ul>
-									</div>
+								<div transition:slide={{ duration: 300, easing: cubicOut }} class="bg-muted p-4">
+									<ul class="space-y-2">
+										{#each row.original.songs as song, i}
+											{@const isLast = i + 1 == row.original.songs.length ? true : false}
+											<SongItem {song} index={i} {isLast} />
+										{/each}
+									</ul>
 								</div>
 							</Table.Cell>
 						</Table.Row>

@@ -8,7 +8,7 @@
 
 <li class="flex h-fit max-w-lg gap-4">
 	<div class="grow-1 flex flex-col items-center gap-2">
-		<div class="flex h-6 w-6 items-center justify-center rounded-full bg-red-200 text-xs">
+		<div class="flex h-6 w-6 items-center justify-center rounded-full bg-purple-200 text-xs">
 			{index + 1}
 		</div>
 		{#if !isLast}
@@ -17,7 +17,7 @@
 	</div>
 	<div class="flex w-full flex-row justify-between">
 		<div class="flex flex-col gap-1">
-			<span class="text-lg font-semibold">{song.title}</span>
+			<span class=" font-bold">{song.title}</span>
 			{#if song.note}
 				<p class="pb-4 text-sm text-gray-600">{song.note}</p>
 			{/if}
