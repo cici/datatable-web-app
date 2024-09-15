@@ -6,6 +6,7 @@
 	import { cubicOut } from 'svelte/easing';
 	import { data } from '$lib/data/sample';
 	import Arrow from '$lib/assets/icons/Arrow.svelte';
+	import SongItem from './song-item.svelte';
 
 	const table = createTable(readable(data));
 
@@ -94,7 +95,7 @@
 	const numColumns = columns.length;
 </script>
 
-<div class="rounded-md border">
+<div class="rounded-lg border">
 	<Table.Root {...$tableAttrs}>
 		<Table.Header>
 			{#each $headerRows as headerRow}
@@ -145,28 +146,14 @@
 					{#if expandedRow === row.original.id}
 						<Table.Row>
 							<Table.Cell colspan={numColumns} class="p-0">
-								<div
-									transition:slide={{ duration: 300, easing: cubicOut }}
-									class="expanded-content"
-								>
+								<div transition:slide={{ duration: 300, easing: cubicOut }} class="bg-muted">
 									<!-- Song Timeline -->
 									<div class="p-4">
-										<ul class="space-y-4">
+										<ul class="space-y-2">
 											<!-- @ts-ignore -->
-											{#each row.original.songs as song}
-												<li class="border-b pb-2">
-													<div class="flex items-center justify-between">
-														<span class="font-medium">{song.title}</span>
-														<div class="flex">
-															{#each song.tags as tag}
-																<span class="tag">{tag}</span>
-															{/each}
-														</div>
-													</div>
-													{#if song.note}
-														<p class="mt-1 text-sm text-gray-600">{song.note}</p>
-													{/if}
-												</li>
+											{#each row.original.songs as song, i}
+												{@const isLast = i + 1 == row.original.songs.length ? true : false}
+												<SongItem {song} index={i} {isLast} />
 											{/each}
 										</ul>
 									</div>
@@ -183,10 +170,7 @@
 <style>
 	/* Add any custom styles here */
 	.table-row:hover {
-		background-color: #f9fafb;
-	}
-	.expanded-content {
-		background-color: #f3f4f6;
+		background-color: #fcfcfc;
 	}
 	.tag {
 		background-color: #e5e7eb;
