@@ -24,7 +24,7 @@
 	<Pagination.Item>
 		<Pagination.PrevButton>
 			<ChevronLeft class="h-4 w-4" />
-			<span class="hidden sm:block">Previous</span>
+			<span class="">Previous</span>
 		</Pagination.PrevButton>
 	</Pagination.Item>
 	{#each pages as page (page.key)}
@@ -42,7 +42,7 @@
 	{/each}
 	<Pagination.Item>
 		<Pagination.NextButton>
-			<span class="hidden sm:block">Next</span>
+			<span class="">Next</span>
 			<ChevronRight class="h-4 w-4" />
 		</Pagination.NextButton>
 	</Pagination.Item>

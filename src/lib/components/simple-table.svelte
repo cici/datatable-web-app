@@ -21,7 +21,7 @@
 	}
 </script>
 
-<div class="max-w-6xl rounded-lg border">
+<div class=" hidden w-full max-w-6xl rounded-lg border md:flex">
 	<Table.Root>
 		<Table.Header>
 			<Table.Row>

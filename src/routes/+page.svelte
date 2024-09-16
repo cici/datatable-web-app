@@ -22,9 +22,14 @@
 </div>
 
 <Pagination.Root count={10} {perPage} bind:page={selectedPage} let:pages let:currentPage>
-	<div class=" hidden w-fit flex-col gap-6 py-6 md:flex md:pt-16">
+	<div class="w-full flex-col gap-6 px-4 py-6 md:flex md:px-36 md:pt-16">
 		<SearchBar />
 		<SimpleTable {eventsData} />
+		<div class=" flex w-full flex-col gap-4 py-6 md:hidden">
+			{#each eventsData as event, i}
+				<MobileDataCard {event} />
+			{/each}
+		</div>
 	</div>
 	<PaginationFooter {pages} {currentPage} bind:selectedPage />
 </Pagination.Root>
