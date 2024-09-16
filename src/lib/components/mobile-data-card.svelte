@@ -14,7 +14,7 @@
 </script>
 
 <Sheet.Root>
-	<Sheet.Trigger
+	<Sheet.Trigger class="w-full"
 		><div class="flex flex-col gap-6 rounded-2xl border-2 p-6">
 			<h1 class="text-left text-lg font-bold">{venue.venueName}</h1>
 			<div class="flex w-full flex-col gap-4">

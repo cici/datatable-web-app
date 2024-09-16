@@ -4,19 +4,18 @@
 	import * as Table from '$lib/components/ui/table';
 	import { slide } from 'svelte/transition';
 	import { cubicOut } from 'svelte/easing';
+	import { data } from '$lib/data/sample';
 	import Arrow from '$lib/assets/icons/Arrow.svelte';
 	import SongItem from './song-item.svelte';
 	import { addPagination } from 'svelte-headless-table/plugins';
 	import { Button } from '$lib/components/ui/button';
-	import { eventsData } from '$lib/data/new-data';
-
-	const table = createTable(readable(eventsData), {
+	const table = createTable(readable(data), {
 		page: addPagination({ initialPageSize: 5 })
 	});
 
 	const columns = table.createColumns([
 		table.column({
-			accessor: 'event_id',
+			accessor: 'id',
 			header: '',
 			cell: ({ row }) => {
 				// @ts-ignore
