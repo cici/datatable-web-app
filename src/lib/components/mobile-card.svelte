@@ -2,6 +2,7 @@
 	import type { Event, Song } from '$lib/data/new-data';
 	import * as Sheet from '$lib/components/ui/sheet';
 	import SongItem from './song-item.svelte';
+	import { Calendar } from 'lucide-svelte';
 
 	export let event: Event;
 
@@ -27,15 +28,22 @@
 				</div>
 				<div class="flex w-full justify-between">
 					<p class="text-muted-foreground">Date</p>
-					<p>{event.event_date}</p>
-				</div>
-				<div class="flex w-full justify-between">
-					<p class="text-muted-foreground">Number of Songs</p>
-					{event.songs.length}
+					<div class="flex w-fit flex-row items-center gap-1.5">
+						<Calendar size={16} class="pb-0.5 opacity-80" />
+						{new Date(event.event_date).toLocaleDateString('en-US', {
+							day: 'numeric',
+							month: 'short',
+							year: 'numeric'
+						})}
+					</div>
 				</div>
 			</div>
-		</div></Sheet.Trigger
-	>
+			<div class="flex w-full justify-between">
+				<p class="text-muted-foreground">Number of Songs</p>
+				{event.songs.length}
+			</div>
+		</div>
+	</Sheet.Trigger>
 	<Sheet.Content class="min-w-[90vw]">
 		<Sheet.Header class="pb-8">
 			<Sheet.Title class="text-left text-lg font-bold">Songs List</Sheet.Title>

@@ -5,6 +5,7 @@
 	import { cubicOut } from 'svelte/easing';
 	import SongItem from './song-item.svelte';
 	import type { Event } from '$lib/data/new-data';
+	import { Calendar } from 'lucide-svelte';
 
 	// Variable to track the expanded row
 	let expandedRow: number | null = null;
@@ -21,12 +22,12 @@
 	}
 </script>
 
-<div class=" hidden w-full max-w-6xl rounded-lg border md:flex">
+<div class="relative hidden w-full max-w-6xl rounded-lg border md:flex">
 	<Table.Root>
 		<Table.Header>
-			<Table.Row>
+			<Table.Row class="sticky top-0">
 				<Table.Head class="w-4 px-0"></Table.Head>
-				<Table.Head>#</Table.Head>
+				<Table.Head class="w-4">#</Table.Head>
 				<Table.Head>Venue Name</Table.Head>
 				<Table.Head>City</Table.Head>
 				<Table.Head>State</Table.Head>
@@ -45,11 +46,18 @@
 								: ''} transform transition-transform duration-300"
 						/>
 					</Table.Cell>
-					<Table.Cell>{i + 1}</Table.Cell>
-					<Table.Cell>{event.venue_name}</Table.Cell>
+					<Table.Cell class="flex items-center justify-center px-0">{i + 1}</Table.Cell>
+					<Table.Cell class="">{event.venue_name}</Table.Cell>
 					<Table.Cell>{event.city_name}</Table.Cell>
 					<Table.Cell>{event.state}</Table.Cell>
-					<Table.Cell>{new Date(event.event_date).toLocaleDateString('en-US')}</Table.Cell>
+					<Table.Cell class="flex flex-row items-center gap-1.5"
+						><Calendar size={16} class="pb-0.5 opacity-80" />
+						{new Date(event.event_date).toLocaleDateString('en-US', {
+							day: 'numeric',
+							month: 'short',
+							year: 'numeric'
+						})}</Table.Cell
+					>
 					<Table.Cell
 						><div class="text-center">
 							<span

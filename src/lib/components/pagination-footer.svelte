@@ -20,7 +20,7 @@
 	};
 </script>
 
-<Pagination.Content class="pb-16">
+<Pagination.Content>
 	<Pagination.Item>
 		<Pagination.PrevButton>
 			<ChevronLeft class="h-4 w-4" />
