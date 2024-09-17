@@ -87,7 +87,7 @@
 			</Accordion.Root>
 		</div>
 		<Dialog.Footer>
-			<div class="flex flex-row gap-3">
+			<div class="flex flex-row justify-end gap-3 py-1">
 				<button
 					class="h-fit w-fit rounded-md bg-gray-200 px-3 py-1.5 font-semibold text-gray-700 hover:bg-gray-300"
 					on:click={() => {

@@ -32,14 +32,14 @@
 					<div class="{$selectedSorting == i ? '' : 'hidden'} absolute left-1 top-2">
 						<Check size={16} />
 					</div>
-					<button on:click={() => updateSorting(i)} class=" w-full p-2 py-1 text-left"
+					<button on:click={() => updateSorting(i)} class=" w-full p-2 py-1.5 text-left"
 						>{option.label}</button
 					>
 				</div>
 			{/each}
 		</div>
 		<hr class="border-gray-200" />
-		<div class="flex w-full flex-row justify-end gap-2 text-sm">
+		<div class="flex w-full flex-row justify-end gap-2 pt-1 text-sm">
 			<button
 				class="h-fit w-fit rounded-md bg-gray-200 px-3 py-1.5 font-semibold text-gray-700 hover:bg-gray-300"
 				on:click={() => {
