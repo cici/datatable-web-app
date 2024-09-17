@@ -15,7 +15,7 @@
 
 <Sheet.Root>
 	<Sheet.Trigger class="w-full"
-		><div class="flex flex-col gap-6 rounded-2xl border-2 p-6">
+		><div class="flex flex-col gap-6 rounded-2xl border p-6 md:border-2">
 			<h1 class="text-left text-lg font-bold">{event.venue_name}</h1>
 			<div class="flex w-full flex-col gap-2">
 				<div class="flex w-full justify-between">

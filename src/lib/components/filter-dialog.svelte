@@ -18,7 +18,7 @@
 	<Dialog.Trigger
 		><button
 			type="button"
-			class="inline-flex h-10 w-fit items-center justify-center gap-1 whitespace-nowrap rounded-lg border-2 border-input px-4 py-2 text-xs font-medium text-black hover:bg-muted"
+			class="inline-flex h-10 w-fit items-center justify-center gap-1 whitespace-nowrap rounded-lg border border-input px-4 py-2 text-xs font-medium text-black hover:bg-muted md:border-2"
 		>
 			<Filter size={16} /> Filters
 			{#if filterCount > 0}

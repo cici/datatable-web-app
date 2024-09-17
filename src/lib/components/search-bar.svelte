@@ -15,7 +15,7 @@
 		bind:value={searchValue}
 		type="text"
 		placeholder="Search"
-		class="e h-10 w-full rounded-lg border-2 px-4 pl-10 focus-visible:ring-1 "
+		class="e h-10 w-full rounded-lg border px-4 pl-10 focus-visible:ring-1 md:border-2 "
 	/>
 	<!-- <button
 		class="flex items-center justify-center rounded-r-lg border-2 border-l-0 px-3 hover:bg-muted"

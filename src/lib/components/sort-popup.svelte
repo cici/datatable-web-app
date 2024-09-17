@@ -18,7 +18,7 @@
 	<Popover.Trigger>
 		<button
 			class=" 
-				  inline-flex w-fit max-w-36 items-center justify-center gap-1 whitespace-nowrap rounded-md border-2 border-input px-4 py-2 text-sm font-medium"
+				  inline-flex w-fit max-w-36 items-center justify-center gap-1 whitespace-nowrap rounded-md border border-input px-4 py-2 text-sm font-medium md:border-2"
 		>
 			Sort
 			<ArrowDown size={16} />
