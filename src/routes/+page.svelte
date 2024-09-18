@@ -14,16 +14,34 @@
 	let perPage = 10;
 	let selectedPage: number | undefined;
 	let searchValue: string;
+	// let eventsData: any[] = [];
 
 	$: console.log('Searched Value:', searchValue);
 
 	const updateResults = async () => {
-		// call api with searchValue
+		// try {
+		// 	const response = await fetch(
+		// 		`https://74db-207-170-229-104.ngrok-free.app/shows?page=${selectedPage}&limit=${perPage}`
+		// 	);
+		// 	if (response.ok) {
+		// 		const data = await response.json();
+		// 		eventsData = data.results; // Assuming the API returns an array of events in a 'results' field
+		// 	} else {
+		// 		console.error('Error fetching data:', response.statusText);
+		// 	}
+		// } catch (error) {
+		// 	console.error('Fetch error:', error);
+		// }
 	};
+
+	// 	// Initially load the data
+	// 	updateResults();
+
+	// 	$: selectedPage, perPage, searchValue, updateResults(); // Re-fetch data when these variables change
 </script>
 
 <Pagination.Root count={10} {perPage} bind:page={selectedPage} let:pages let:currentPage>
-	<div class="w-full flex-col gap-6 py-6 md:flex md:pt-16 {pagePadding}">
+	<div class="w-full flex-col gap-6 py-6 md:flex md:pt-6 {pagePadding}">
 		<div class="flex flex-col gap-2 md:flex-row">
 			<SearchBar bind:searchValue />
 			<div class="flex flex-row gap-2">
