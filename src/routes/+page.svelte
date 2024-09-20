@@ -1,4 +1,6 @@
 <script lang="ts">
+	import Spinner from '$lib/components/spinner.svelte';
+	import { browser } from '$app/environment';
 	import FilterPopup from '$lib/components/filter-dialog.svelte';
 	import ItemsPerPage from '$lib/components/Items-per-page.svelte';
 	import MobileDataCard from '$lib/components/mobile-card.svelte';
@@ -7,72 +9,108 @@
 	import SimpleTable from '$lib/components/simple-table.svelte';
 	import SortPopup from '$lib/components/sort-popup.svelte';
 	import * as Pagination from '$lib/components/ui/pagination';
-	import { eventsData } from '$lib/data/new-data';
 	import { resetAllFilters } from '$lib/stores/filters';
 	import { pagePadding } from '$lib/utils/styles';
+	import { onMount } from 'svelte';
+	import { fade, fly } from 'svelte/transition';
 
 	let perPage = 10;
-	let selectedPage: number | undefined;
-	let searchValue: string;
-	// let eventsData: any[] = [];
+	let selectedPage: number = 1;
+	let searchValue: string = '';
+	let eventsData: any[] = [];
+	let loading = false;
+	let loaded = false;
 
-	$: console.log('Searched Value:', searchValue);
+	// Keep track of the last state to prevent unnecessary API calls
+	let previousPage: number = selectedPage;
+	let previousPerPage: number = perPage;
+	let previousSearchValue: string = searchValue;
 
 	const updateResults = async () => {
-		// try {
-		// 	const response = await fetch(
-		// 		`https://74db-207-170-229-104.ngrok-free.app/shows?page=${selectedPage}&limit=${perPage}`
-		// 	);
-		// 	if (response.ok) {
-		// 		const data = await response.json();
-		// 		eventsData = data.results; // Assuming the API returns an array of events in a 'results' field
-		// 	} else {
-		// 		console.error('Error fetching data:', response.statusText);
-		// 	}
-		// } catch (error) {
-		// 	console.error('Fetch error:', error);
-		// }
+		loading = true;
+		console.log('Updating results from API');
+		try {
+			const response = await fetch(`/api/events`, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ selectedPage, perPage, searchValue })
+			});
+			if (response.ok) {
+				const data = await response.json();
+				eventsData = data.results;
+			} else {
+				console.error('Error fetching data:', response.statusText);
+			}
+		} catch (error) {
+			console.error('Fetch error:', error);
+		} finally {
+			loading = false;
+		}
 	};
 
-	// 	// Initially load the data
-	// 	updateResults();
+	onMount(() => {
+		if (browser) {
+			loaded = true;
+			updateResults();
+		}
+	});
 
-	// 	$: selectedPage, perPage, searchValue, updateResults(); // Re-fetch data when these variables change
+	// Reactive block to call API only when any of the relevant values change
+	$: if (loaded) {
+		// Only call the API if the page, perPage, or search value has changed
+		if (
+			selectedPage !== previousPage ||
+			perPage !== previousPerPage ||
+			searchValue !== previousSearchValue
+		) {
+			console.log('updating now...');
+			updateResults();
+
+			// Update the previous values to prevent re-triggering
+			previousPage = selectedPage;
+			previousPerPage = perPage;
+			previousSearchValue = searchValue;
+		}
+	}
 </script>
 
-<Pagination.Root count={10} {perPage} bind:page={selectedPage} let:pages let:currentPage>
-	<div class="w-full flex-col gap-6 py-6 md:flex md:pt-6 {pagePadding}">
-		<div class="flex flex-col gap-2 md:flex-row">
-			<SearchBar bind:searchValue />
-			<div class="flex flex-row gap-2">
-				<FilterPopup
-					onApply={() => {
-						updateResults();
-					}}
-					onClear={() => {
-						resetAllFilters();
-						updateResults();
-					}}
-				/>
-				<SortPopup
-					onApply={() => {
-						updateResults();
-					}}
-				/>
+{#if eventsData.length !== 0}
+	<Pagination.Root count={10} {perPage} bind:page={selectedPage} let:pages let:currentPage>
+		<div class="w-full flex-col gap-6 py-6 md:flex md:pt-6 {pagePadding}">
+			<div class="flex flex-col gap-2 md:flex-row">
+				<SearchBar bind:searchValue />
+				<div class="flex flex-row gap-2">
+					<FilterPopup
+						onApply={() => updateResults()}
+						onClear={() => {
+							resetAllFilters();
+							updateResults();
+						}}
+					/>
+					<SortPopup onApply={() => updateResults()} />
+				</div>
+			</div>
+
+			<SimpleTable {eventsData} />
+			<div class="flex w-full flex-col gap-4 py-6 md:hidden">
+				{#each eventsData as event, i}
+					<MobileDataCard {event} />
+				{/each}
 			</div>
 		</div>
-
-		<SimpleTable {eventsData} />
-		<div class=" flex w-full flex-col gap-4 py-6 md:hidden">
-			{#each eventsData as event, i}
-				<MobileDataCard {event} />
-			{/each}
+		<div
+			class="flex w-full flex-col items-center justify-between gap-4 pb-16 md:flex-row {pagePadding}"
+		>
+			<ItemsPerPage bind:perPage />
+			<PaginationFooter {pages} {currentPage} bind:selectedPage />
 		</div>
-	</div>
+	</Pagination.Root>
+{/if}
+{#if loading}
 	<div
-		class="flex w-full flex-col items-center justify-between gap-4 pb-16 md:flex-row {pagePadding}"
+		transition:fade={{ duration: 200 }}
+		class="fixed left-1/2 top-1/2 z-50 flex -translate-x-1/2 -translate-y-1/2 transform items-center justify-center rounded-lg bg-white p-4 shadow-lg"
 	>
-		<ItemsPerPage bind:perPage />
-		<PaginationFooter {pages} {currentPage} bind:selectedPage />
+		<Spinner />
 	</div>
-</Pagination.Root>
+{/if}

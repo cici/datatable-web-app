@@ -1,7 +1,7 @@
 <script lang="ts">
 	import * as Table from '$lib/components/ui/table';
 	import Arrow from '$lib/assets/icons/Arrow.svelte';
-	import { slide } from 'svelte/transition';
+	import { fly, slide } from 'svelte/transition';
 	import { cubicOut } from 'svelte/easing';
 	import SongItem from './song-item.svelte';
 	import type { Event } from '$lib/data/new-data';
@@ -63,13 +63,13 @@
 							<span
 								class="rounded-md border bg-muted px-2 py-1 text-sm font-semibold text-muted-foreground"
 							>
-								{event.songs.length}
+								{event.songs ? event.songs.length : '-'}
 							</span>
 						</div></Table.Cell
 					>
 				</Table.Row>
 
-				{#if expandedRow === event.event_id}
+				{#if expandedRow === event.event_id && event.songs}
 					<Table.Row>
 						<Table.Cell colspan={7} class="p-0">
 							<div transition:slide={{ duration: 300, easing: cubicOut }} class="bg-muted p-4">

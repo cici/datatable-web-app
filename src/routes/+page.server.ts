@@ -1,37 +1,38 @@
-// import type { PageLoad } from './$types';
+// import type { PageServerLoad } from './$types';
 
-// export const load: PageLoad = async ({ fetch, url }) => {
-// 	const page = url.searchParams.get('page') || '1';
-// 	const limit = url.searchParams.get('limit') || '10';
+// export const load: PageServerLoad = async () => {
+// 	const perPage = 10; // Default value
+// 	const selectedPage = 1; // Default value
+// 	const searchValue = ''; // Default value
+
+// 	const apiUrl = `https://mysetlist.onrender.com/shows?page=${selectedPage}&limit=${perPage}&search=${encodeURIComponent(searchValue)}`;
 
 // 	try {
-// 		const response = await fetch(
-// 			`https://74db-207-170-229-104.ngrok-free.app/shows?page=${page}&limit=${limit}`
-// 		);
+// 		const response = await fetch(apiUrl);
 // 		if (response.ok) {
 // 			const data = await response.json();
 // 			return {
-// 				props: {
-// 					eventsData: data.results, // Assuming the API returns an array of events in a 'results' field
-// 					totalCount: data.totalCount // Assuming the API returns total count of items for pagination
-// 				}
+// 				eventsData: data.results,
+// 				perPage,
+// 				selectedPage,
+// 				searchValue
 // 			};
 // 		} else {
 // 			console.error('Error fetching data:', response.statusText);
 // 			return {
-// 				props: {
-// 					eventsData: [],
-// 					totalCount: 0
-// 				}
+// 				eventsData: [],
+// 				perPage,
+// 				selectedPage,
+// 				searchValue
 // 			};
 // 		}
 // 	} catch (error) {
 // 		console.error('Fetch error:', error);
 // 		return {
-// 			props: {
-// 				eventsData: [],
-// 				totalCount: 0
-// 			}
+// 			eventsData: [],
+// 			perPage,
+// 			selectedPage,
+// 			searchValue
 // 		};
 // 	}
 // };

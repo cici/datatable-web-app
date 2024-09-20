@@ -17,7 +17,7 @@
 <div class="flex h-fit items-center gap-2">
 	<p class="text-sm text-muted-foreground">Results per page</p>
 	<Select.Root
-		selected={perPageOptions[1]}
+		selected={perPageOptions[0]}
 		onSelectedChange={(selected) => {
 			setPerPage(selected);
 		}}
