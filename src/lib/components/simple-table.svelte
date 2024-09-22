@@ -8,12 +8,12 @@
 	import { Calendar } from 'lucide-svelte';
 
 	// Variable to track the expanded row
-	let expandedRow: number | null = null;
+	let expandedRow: string | null = null;
 
 	export let eventsData: Event[];
 
 	// Function to toggle row expansion
-	function toggleRow(id: number) {
+	function toggleRow(id: string) {
 		if (expandedRow === id) {
 			expandedRow = null; // Collapse if the same row is clicked
 		} else {
@@ -37,11 +37,11 @@
 		</Table.Header>
 		<Table.Body>
 			{#each eventsData as event, i}
-				<Table.Row on:click={() => toggleRow(event.event_id)} class="cursor-pointer">
+				<Table.Row on:click={() => toggleRow(event.artist_show_id)} class="cursor-pointer">
 					<Table.Cell>
 						<Arrow
 							size={16}
-							class="{expandedRow === event.event_id
+							class="{expandedRow === event.artist_show_id
 								? 'rotate-90'
 								: ''} transform transition-transform duration-300"
 						/>
@@ -63,19 +63,19 @@
 							<span
 								class="rounded-md border bg-muted px-2 py-1 text-sm font-semibold text-muted-foreground"
 							>
-								{event.songs ? event.songs.length : '-'}
+								{event.song_list ? event.song_list.length : '-'}
 							</span>
 						</div></Table.Cell
 					>
 				</Table.Row>
 
-				{#if expandedRow === event.event_id && event.songs}
+				{#if expandedRow === event.artist_show_id && event.song_list}
 					<Table.Row>
 						<Table.Cell colspan={7} class="p-0">
 							<div transition:slide={{ duration: 300, easing: cubicOut }} class="bg-muted p-4">
 								<ul class="space-y-2">
-									{#each event.songs as song, i}
-										{@const isLast = i + 1 === event.songs.length}
+									{#each event.song_list as song, i}
+										{@const isLast = i + 1 === event.song_list.length}
 										<SongItem {song} index={i} {isLast} />
 									{/each}
 								</ul>

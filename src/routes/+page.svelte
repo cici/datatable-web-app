@@ -18,8 +18,10 @@
 	let selectedPage: number = 1;
 	let searchValue: string = '';
 	let eventsData: any[] = [];
+	let totalEvents: number;
+
 	let loading = false;
-	let loaded = false;
+	let browserLoaded = false;
 
 	// Keep track of the last state to prevent unnecessary API calls
 	let previousPage: number = selectedPage;
@@ -37,7 +39,8 @@
 			});
 			if (response.ok) {
 				const data = await response.json();
-				eventsData = data.results;
+				eventsData = data.results.show_list;
+				totalEvents = data.results.total_shows;
 			} else {
 				console.error('Error fetching data:', response.statusText);
 			}
@@ -50,13 +53,13 @@
 
 	onMount(() => {
 		if (browser) {
-			loaded = true;
+			browserLoaded = true;
 			updateResults();
 		}
 	});
 
 	// Reactive block to call API only when any of the relevant values change
-	$: if (loaded) {
+	$: if (browserLoaded) {
 		// Only call the API if the page, perPage, or search value has changed
 		if (
 			selectedPage !== previousPage ||
@@ -75,7 +78,13 @@
 </script>
 
 {#if eventsData.length !== 0}
-	<Pagination.Root count={10} {perPage} bind:page={selectedPage} let:pages let:currentPage>
+	<Pagination.Root
+		bind:count={totalEvents}
+		{perPage}
+		bind:page={selectedPage}
+		let:pages
+		let:currentPage
+	>
 		<div class="w-full flex-col gap-6 py-6 md:flex md:pt-6 {pagePadding}">
 			<div class="flex flex-col gap-2 md:flex-row">
 				<SearchBar bind:searchValue />

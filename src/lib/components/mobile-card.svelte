@@ -40,7 +40,7 @@
 			</div>
 			<div class="flex w-full justify-between">
 				<p class="text-muted-foreground">Number of Songs</p>
-				{event.songs ? event.songs.length : '0'}
+				{event.song_list ? event.song_list.length : '0'}
 			</div>
 		</div>
 	</Sheet.Trigger>
@@ -49,9 +49,9 @@
 			<Sheet.Title class="text-left text-lg font-bold">Songs List</Sheet.Title>
 		</Sheet.Header>
 		<ul class="space-y-2">
-			{#if event.songs}
-				{#each event.songs as song, i}
-					{@const isLast = i + 1 == event.songs.length ? true : false}
+			{#if event.song_list}
+				{#each event.song_list as song, i}
+					{@const isLast = i + 1 == event.song_list.length ? true : false}
 					<SongItem {song} index={i} {isLast} />
 				{/each}
 			{/if}

@@ -5,12 +5,12 @@ export interface Song {
 }
 
 export interface Event {
-	event_id: number;
+	artist_show_id: string;
 	event_date: string;
 	venue_name: string;
 	city_name: string;
 	state: string;
-	songs: Song[];
+	song_list: Song[];
 }
 
 export const eventsData: Event[] = [
