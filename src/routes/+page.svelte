@@ -30,7 +30,7 @@
 
 	const updateResults = async () => {
 		loading = true;
-		console.log('Updating results from API');
+		window.scrollTo({ top: 0, behavior: 'smooth' });
 		try {
 			const response = await fetch(`/api/events`, {
 				method: 'POST',
@@ -66,7 +66,6 @@
 			perPage !== previousPerPage ||
 			searchValue !== previousSearchValue
 		) {
-			console.log('updating now...');
 			updateResults();
 
 			// Update the previous values to prevent re-triggering
@@ -100,7 +99,7 @@
 				</div>
 			</div>
 
-			<SimpleTable {eventsData} />
+			<SimpleTable {eventsData} {currentPage} {perPage} />
 			<div class="flex w-full flex-col gap-4 py-6 md:hidden">
 				{#each eventsData as event, i}
 					<MobileDataCard {event} />

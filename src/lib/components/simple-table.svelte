@@ -11,6 +11,8 @@
 	let expandedRow: string | null = null;
 
 	export let eventsData: Event[];
+	export let currentPage: number | undefined;
+	export let perPage: number | undefined;
 
 	// Function to toggle row expansion
 	function toggleRow(id: string) {
@@ -46,7 +48,9 @@
 								: ''} transform transition-transform duration-300"
 						/>
 					</Table.Cell>
-					<Table.Cell class="flex items-center justify-center px-0">{i + 1}</Table.Cell>
+					<Table.Cell class="flex items-center justify-center px-0"
+						>{(currentPage - 1) * perPage + i + 1}</Table.Cell
+					>
 					<Table.Cell class="">{event.venue_name}</Table.Cell>
 					<Table.Cell>{event.city_name}</Table.Cell>
 					<Table.Cell>{event.state}</Table.Cell>

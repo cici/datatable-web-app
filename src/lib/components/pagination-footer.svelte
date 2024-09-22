@@ -21,7 +21,7 @@
 </script>
 
 <Pagination.Content>
-	<Pagination.Item>
+	<Pagination.Item class="hidden md:block">
 		<Pagination.PrevButton>
 			<ChevronLeft class="h-4 w-4" />
 			<span class="">Previous</span>
@@ -40,7 +40,7 @@
 			</Pagination.Item>
 		{/if}
 	{/each}
-	<Pagination.Item>
+	<Pagination.Item class="hidden md:block">
 		<Pagination.NextButton>
 			<span class="">Next</span>
 			<ChevronRight class="h-4 w-4" />
