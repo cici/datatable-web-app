@@ -2,7 +2,7 @@
 
 Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
 
-## Creating a project
+## Creating a Deploy
 
 If you're seeing this, you've probably already done this step. Congrats!
 
