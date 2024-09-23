@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Spinner from '$lib/components/spinner.svelte';
+	import { toast } from 'svelte-sonner';
 	import { browser } from '$app/environment';
 	import FilterPopup from '$lib/components/filter-dialog.svelte';
 	import ItemsPerPage from '$lib/components/Items-per-page.svelte';
@@ -23,7 +24,7 @@
 	let loading = false;
 	let browserLoaded = false;
 
-	// Keep track of the last state to prevent unnecessary API calls
+	// Keeping track of the last state to prevent unnecessary API calls
 	let previousPage: number = selectedPage;
 	let previousPerPage: number = perPage;
 	let previousSearchValue: string = searchValue;
@@ -43,6 +44,9 @@
 				totalEvents = data.results.total_shows;
 			} else {
 				console.error('Error fetching data:', response.statusText);
+				toast.error(`Error: ${response.statusText}`, {
+					duration: 6000
+				});
 			}
 		} catch (error) {
 			console.error('Fetch error:', error);
