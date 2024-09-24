@@ -15,8 +15,24 @@
 	import { onMount } from 'svelte';
 	import { fade, fly } from 'svelte/transition';
 
+	const searchOptions = [
+		{
+			label: 'Song',
+			value: 'song'
+		},
+		{
+			label: 'Venue',
+			value: 'venue'
+		},
+		{
+			label: 'City',
+			value: 'city'
+		}
+	];
+
 	let perPage = 10;
 	let selectedPage: number = 1;
+	let searchType = searchOptions[0];
 	let searchValue: string = '';
 	let eventsData: any[] = [];
 	let totalEvents: number;
@@ -33,15 +49,25 @@
 		loading = true;
 		window.scrollTo({ top: 0, behavior: 'smooth' });
 		try {
-			const response = await fetch(`/api/events`, {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ selectedPage, perPage, searchValue })
-			});
+			let response;
+			if (searchValue && searchType) {
+				response = await fetch(`/api/search-events`, {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ selectedPage, perPage, searchValue, searchType: searchType.value })
+				});
+			} else {
+				response = await fetch(`/api/get-events`, {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ selectedPage, perPage })
+				});
+			}
 			if (response.ok) {
 				const data = await response.json();
 				eventsData = data.results.show_list;
-				totalEvents = data.results.total_shows;
+				totalEvents = data.results.show_list[0].full_count;
+				console.log(eventsData);
 			} else {
 				console.error('Error fetching data:', response.statusText);
 				toast.error(`Error: ${response.statusText}`, {
@@ -50,6 +76,9 @@
 			}
 		} catch (error) {
 			console.error('Fetch error:', error);
+			toast.error(`Error: ${error}`, {
+				duration: 6000
+			});
 		} finally {
 			loading = false;
 		}
@@ -65,64 +94,63 @@
 	// Reactive block to call API only when any of the relevant values change
 	$: if (browserLoaded) {
 		// Only call the API if the page, perPage, or search value has changed
-		if (
-			selectedPage !== previousPage ||
-			perPage !== previousPerPage ||
-			searchValue !== previousSearchValue
-		) {
+		if (selectedPage !== previousPage || perPage !== previousPerPage) {
 			updateResults();
 
-			// Update the previous values to prevent re-triggering
 			previousPage = selectedPage;
 			previousPerPage = perPage;
-			previousSearchValue = searchValue;
 		}
 	}
 </script>
 
-{#if eventsData.length !== 0}
-	<Pagination.Root
-		bind:count={totalEvents}
-		{perPage}
-		bind:page={selectedPage}
-		let:pages
-		let:currentPage
-	>
-		<div class="w-full flex-col gap-6 py-6 md:flex md:pt-6 {pagePadding}">
-			<div class="flex flex-col gap-2 md:flex-row">
-				<SearchBar bind:searchValue />
-				<div class="flex flex-row gap-2">
-					<FilterPopup
-						onApply={() => updateResults()}
-						onClear={() => {
-							resetAllFilters();
-							updateResults();
-						}}
-					/>
-					<SortPopup onApply={() => updateResults()} />
-				</div>
+<Pagination.Root
+	bind:count={totalEvents}
+	{perPage}
+	bind:page={selectedPage}
+	let:pages
+	let:currentPage
+>
+	<div class="w-full flex-col gap-6 py-6 md:flex md:pt-6 {pagePadding}">
+		<div class="flex flex-col gap-2 md:flex-row">
+			<SearchBar
+				{updateResults}
+				bind:searchValue
+				bind:selectedOption={searchType}
+				{searchOptions}
+			/>
+			<div class="flex flex-row gap-2">
+				<FilterPopup
+					onApply={() => updateResults()}
+					onClear={() => {
+						resetAllFilters();
+						updateResults();
+					}}
+				/>
+				<SortPopup onApply={() => updateResults()} />
 			</div>
-
+		</div>
+		{#if eventsData.length !== 0}
 			<SimpleTable {eventsData} {currentPage} {perPage} />
 			<div class="flex w-full flex-col gap-4 py-6 md:hidden">
 				{#each eventsData as event, i}
 					<MobileDataCard {event} />
 				{/each}
 			</div>
-		</div>
+		{:else if loading}
+			<Spinner />
+		{:else}
+			<h1 class="my-16 w-full text-center text-2xl font-bold">No results Found</h1>
+		{/if}
+	</div>
+	{#if eventsData.length !== 0}
 		<div
 			class="flex w-full flex-col items-center justify-between gap-4 pb-16 md:flex-row {pagePadding}"
 		>
 			<ItemsPerPage bind:perPage />
 			<PaginationFooter {pages} {currentPage} bind:selectedPage />
 		</div>
-	</Pagination.Root>
-{/if}
+	{/if}
+</Pagination.Root>
 {#if loading}
-	<div
-		transition:fade={{ duration: 200 }}
-		class="fixed left-1/2 top-1/2 z-50 flex -translate-x-1/2 -translate-y-1/2 transform items-center justify-center rounded-lg bg-white p-4 shadow-lg"
-	>
-		<Spinner />
-	</div>
+	<Spinner />
 {/if}

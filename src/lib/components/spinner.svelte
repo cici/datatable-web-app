@@ -1,8 +1,15 @@
 <script>
+	import { fade } from 'svelte/transition';
+
 	export let size = '40px'; // You can pass the size as a prop
 </script>
 
-<div class="spinner border-muted" style="--size: {size}; }"></div>
+<div
+	transition:fade={{ duration: 200 }}
+	class="fixed left-1/2 top-1/2 z-50 flex -translate-x-1/2 -translate-y-1/2 transform items-center justify-center rounded-lg bg-white p-4 shadow-lg"
+>
+	<div class="spinner border-muted" style="--size: {size}; }"></div>
+</div>
 
 <style>
 	.spinner {

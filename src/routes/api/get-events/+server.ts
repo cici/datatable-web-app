@@ -1,9 +1,11 @@
 import type { RequestHandler } from '@sveltejs/kit';
 
 export const POST: RequestHandler = async ({ request }) => {
-	const { selectedPage, perPage, searchValue } = await request.json();
+	const { selectedPage, perPage } = await request.json();
 
-	const apiUrl = `https://mysetlist.onrender.com/shows?page=${selectedPage}&limit=${perPage}&search=${encodeURIComponent(searchValue)}`;
+	const apiUrl = `https://mysetlist.onrender.com/shows?page=${selectedPage}&limit=${perPage}`;
+
+	console.log(apiUrl);
 
 	try {
 		const response = await fetch(apiUrl);
