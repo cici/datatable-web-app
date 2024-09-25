@@ -44,7 +44,7 @@
 			</div>
 		</div>
 	</Sheet.Trigger>
-	<Sheet.Content class="min-w-[90vw]">
+	<Sheet.Content class="min-w-[90vw] overflow-y-auto">
 		<Sheet.Header class="pb-8">
 			<Sheet.Title class="text-left text-lg font-bold">Songs List</Sheet.Title>
 		</Sheet.Header>

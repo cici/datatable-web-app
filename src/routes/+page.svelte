@@ -37,7 +37,7 @@
 	let eventsData: any[] = [];
 	let totalEvents: number;
 
-	let loading = false;
+	let loading = true;
 	let browserLoaded = false;
 
 	// Keeping track of the last state to prevent unnecessary API calls
@@ -75,10 +75,6 @@
 				});
 			}
 		} catch (error) {
-			console.error('Fetch error:', error);
-			toast.error(`Error: ${error}`, {
-				duration: 6000
-			});
 		} finally {
 			loading = false;
 		}
@@ -139,7 +135,17 @@
 		{:else if loading}
 			<Spinner />
 		{:else}
-			<h1 class="my-16 w-full text-center text-2xl font-bold">No results Found</h1>
+			<div class="flex w-full flex-col items-center">
+				<h1 class="mb-4 mt-16 w-full text-center text-2xl font-bold">No results Found</h1>
+				<button
+					on:click={() => {
+						searchValue = '';
+						updateResults();
+					}}
+					class="mx-auto w-fit rounded-md bg-primary px-3 py-2 text-primary-foreground"
+					>Go Back</button
+				>
+			</div>
 		{/if}
 	</div>
 	{#if eventsData.length !== 0}

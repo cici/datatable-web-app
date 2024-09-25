@@ -7,19 +7,17 @@
 	import type { Event } from '$lib/data/new-data';
 	import { Calendar } from 'lucide-svelte';
 
-	// Variable to track the expanded row
 	let expandedRow: string | null = null;
 
 	export let eventsData: Event[];
 	export let currentPage: number | undefined;
 	export let perPage: number | undefined;
 
-	// Function to toggle row expansion
 	function toggleRow(id: string) {
 		if (expandedRow === id) {
-			expandedRow = null; // Collapse if the same row is clicked
+			expandedRow = null;
 		} else {
-			expandedRow = id; // Expand the new row
+			expandedRow = id;
 		}
 	}
 </script>
@@ -39,7 +37,10 @@
 		</Table.Header>
 		<Table.Body>
 			{#each eventsData as event, i}
-				<Table.Row on:click={() => toggleRow(event.artist_show_id)} class="cursor-pointer">
+				<Table.Row
+					on:click={() => toggleRow(event.artist_show_id)}
+					class="cursor-pointer {i % 2 == 0 ? 'bg-purple-100 hover:bg-purple-200' : ''}"
+				>
 					<Table.Cell>
 						<Arrow
 							size={16}
@@ -73,7 +74,7 @@
 					>
 				</Table.Row>
 
-				{#if expandedRow === event.artist_show_id && event.song_list}
+				{#if expandedRow === event.artist_show_id && event.song_list && event.song_list.length !== 0}
 					<Table.Row>
 						<Table.Cell colspan={7} class="p-0">
 							<div transition:slide={{ duration: 300, easing: cubicOut }} class="bg-muted p-4">
