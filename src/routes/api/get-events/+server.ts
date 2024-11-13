@@ -5,6 +5,7 @@ export const POST: RequestHandler = async ({ request }) => {
 
 	const apiUrl = `https://mysetlist.onrender.com/shows?page=${selectedPage}&limit=${perPage}`;
 
+	console.log('SERVER');
 	console.log(apiUrl);
 
 	try {

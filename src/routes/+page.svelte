@@ -51,12 +51,14 @@
 		try {
 			let response;
 			if (searchValue && searchType) {
+				console.log('HERE');
 				response = await fetch(`/api/search-events`, {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json' },
 					body: JSON.stringify({ selectedPage, perPage, searchValue, searchType: searchType.value })
 				});
 			} else {
+				console.log('GET');
 				response = await fetch(`/api/get-events`, {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json' },
@@ -69,9 +71,14 @@
 				totalEvents = data.results.show_list[0].full_count;
 				console.log(eventsData);
 			} else {
-				console.error('Error fetching data:', response.statusText);
-				toast.error(`Error: ${response.statusText}`, {
-					duration: 6000
+				console.error('Error fetching data:', response);
+				let msg = response.statusText;
+				if (response.status == 500) {
+					msg = 'Unable to connect to database';
+				}
+				console.log(msg);
+				toast.error(`Error: ${msg}`, {
+					duration: 8000
 				});
 			}
 		} catch (error) {
@@ -136,7 +143,7 @@
 			<Spinner />
 		{:else}
 			<div class="flex w-full flex-col items-center">
-				<h1 class="mb-4 mt-16 w-full text-center text-2xl font-bold">No results Found</h1>
+				<h1 class="mb-4 mt-16 w-full text-center text-2xl font-bold">No Results Found</h1>
 				<button
 					on:click={() => {
 						searchValue = '';
