@@ -51,7 +51,6 @@
 		try {
 			let response;
 			if (searchValue && searchType) {
-				console.log('HERE');
 				response = await fetch(`/api/search-events`, {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json' },
@@ -73,15 +72,51 @@
 			} else {
 				console.error('Error fetching data:', response);
 				let msg = response.statusText;
+				
+				// Try to get error details from response body
+				try {
+					const errorData = await response.json();
+					if (errorData.error) {
+						msg = errorData.error;
+					}
+				} catch (parseError) {
+					console.log('Could not parse error response:', parseError);
+				}
+				
+				// Provide more specific error messages based on status code
 				if (response.status == 500) {
 					msg = 'Unable to connect to database';
+				} else if (response.status == 404) {
+					msg = 'Service not found';
+				} else if (response.status == 400) {
+					msg = 'Invalid request';
+				} else if (response.status >= 500) {
+					msg = 'Server error occurred';
+				} else if (response.status >= 400) {
+					msg = 'Request failed';
 				}
-				console.log(msg);
+				
+				console.log('Error message:', msg);
 				toast.error(`Error: ${msg}`, {
 					duration: 8000
 				});
 			}
-		} catch (error) {
+		} catch (error: unknown) {
+			console.error('Network or parsing error:', error);
+			let errorMessage = 'An unexpected error occurred';
+			
+			// Provide more specific error messages based on error type
+			if (error instanceof TypeError && error.message.includes('fetch')) {
+				errorMessage = 'Network connection failed';
+			} else if (error instanceof SyntaxError) {
+				errorMessage = 'Invalid response format';
+			} else if (error instanceof Error && error.message) {
+				errorMessage = error.message;
+			}
+			
+			toast.error(`Error: ${errorMessage}`, {
+				duration: 8000
+			});
 		} finally {
 			loading = false;
 		}
