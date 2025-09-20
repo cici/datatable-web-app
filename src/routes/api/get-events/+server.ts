@@ -16,7 +16,6 @@ export const POST: RequestHandler = async ({ request }) => {
 			console.log(response);
 			const data = await response.json();
 			console.log("data has been populated");
-			console.log('data:', data.results);
 			return new Response(JSON.stringify({ results: data }), {
 				headers: { 'Content-Type': 'application/json' }
 			});
