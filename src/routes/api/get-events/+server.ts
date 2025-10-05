@@ -10,29 +10,31 @@ export const POST: RequestHandler = async ({ request }) => {
 
 	try {
 		const response = await fetch(apiUrl);
-		console.log("before checking response")
+		console.log('before checking response');
 		if (response.ok) {
-			console.log("response is ok");
+			console.log('response is ok');
 			console.log(response);
 			const data = await response.json();
-			console.log("data has been populated");
+			console.log('data has been populated');
 			return new Response(JSON.stringify({ results: data }), {
 				headers: { 'Content-Type': 'application/json' }
 			});
 		} else {
 			console.error('Error fetching data:', response.status, response.statusText);
-			
+
 			// Try to get error details from the external API
 			let errorMessage = 'Failed to fetch events data';
 			try {
 				const errorData = await response.text();
+				console.log('ERROR: ');
+				console.log(errorData);
 				if (errorData) {
 					errorMessage = `External API error: ${errorData}`;
 				}
 			} catch (parseError) {
 				console.log('Could not parse external API error response');
 			}
-			
+
 			// Provide more specific error messages based on status code
 			if (response.status === 404) {
 				errorMessage = 'Events endpoint not found';
@@ -49,7 +51,7 @@ export const POST: RequestHandler = async ({ request }) => {
 			} else if (response.status >= 400) {
 				errorMessage = 'External API request failed';
 			}
-			
+
 			return new Response(JSON.stringify({ error: errorMessage, status: response.status }), {
 				status: response.status,
 				headers: { 'Content-Type': 'application/json' }
@@ -57,7 +59,7 @@ export const POST: RequestHandler = async ({ request }) => {
 		}
 	} catch (error: unknown) {
 		console.error('Fetch error:', error);
-		
+
 		let errorMessage = 'Network request failed';
 		if (error instanceof TypeError && error.message.includes('fetch')) {
 			errorMessage = 'Unable to connect to external service';
@@ -66,7 +68,7 @@ export const POST: RequestHandler = async ({ request }) => {
 		} else if (error instanceof Error && error.message) {
 			errorMessage = `Request error: ${error.message}`;
 		}
-		
+
 		return new Response(JSON.stringify({ error: errorMessage }), {
 			status: 500,
 			headers: { 'Content-Type': 'application/json' }
