@@ -168,11 +168,14 @@
 			</div>
 		</div>
 		{#if eventsData.length !== 0}
-			<SimpleTable {eventsData} {currentPage} {perPage} />
-			<div class="flex w-full flex-col gap-4 py-6 md:hidden">
-				{#each eventsData as event, i}
-					<MobileDataCard {event} />
-				{/each}
+			<!-- Table and mobile cards container with consistent width constraints -->
+			<div class="w-full max-w-6xl mx-auto">
+				<SimpleTable {eventsData} {currentPage} {perPage} />
+				<div class="flex w-full flex-col gap-4 py-6 md:hidden">
+					{#each eventsData as event, i}
+						<MobileDataCard {event} />
+					{/each}
+				</div>
 			</div>
 		{:else if loading}
 			<Spinner />
@@ -191,11 +194,11 @@
 		{/if}
 	</div>
 	{#if eventsData.length !== 0}
-		<div
-			class="flex w-full flex-col items-center justify-between gap-4 pb-16 md:flex-row {pagePadding}"
-		>
-			<ItemsPerPage bind:perPage />
-			<PaginationFooter {pages} {currentPage} bind:selectedPage />
+		<div class="w-full max-w-6xl mx-auto {pagePadding}">
+			<div class="flex w-full flex-col items-center justify-between gap-4 pb-16 md:flex-row">
+				<ItemsPerPage bind:perPage />
+				<PaginationFooter {pages} {currentPage} bind:selectedPage />
+			</div>
 		</div>
 	{/if}
 </Pagination.Root>

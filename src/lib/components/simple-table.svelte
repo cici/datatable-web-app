@@ -22,7 +22,7 @@
 	}
 </script>
 
-<div class="relative hidden w-full max-w-6xl rounded-lg border md:flex">
+<div class="relative hidden w-full rounded-lg border md:flex">
 	<Table.Root>
 		<Table.Header>
 			<Table.Row class="sticky top-0">
