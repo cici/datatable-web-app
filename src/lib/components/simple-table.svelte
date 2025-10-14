@@ -52,9 +52,9 @@
 					<Table.Cell class="flex items-center justify-center px-0"
 						>{(currentPage - 1) * perPage + i + 1}</Table.Cell
 					>
-					<Table.Cell class="">{event.venue_name}</Table.Cell>
-					<Table.Cell>{event.city_name}</Table.Cell>
-					<Table.Cell>{event.state}</Table.Cell>
+					<Table.Cell class="">{event.venue?.venue_name || 'N/A'}</Table.Cell>
+					<Table.Cell>{event.venue?.city?.city_name || 'N/A'}</Table.Cell>
+					<Table.Cell>{event.venue?.city?.state || 'N/A'}</Table.Cell>
 					<Table.Cell class="flex flex-row items-center gap-1.5"
 						><Calendar size={16} class="pb-0.5 opacity-80" />
 						{new Date(event.event_date).toLocaleDateString('en-US', {
@@ -68,19 +68,19 @@
 							<span
 								class="rounded-md border bg-muted px-2 py-1 text-sm font-semibold text-muted-foreground"
 							>
-								{event.song_list ? event.song_list.length : '-'}
+							{event.songs ? event.songs.length : '-'}
 							</span>
 						</div></Table.Cell
 					>
 				</Table.Row>
 
-				{#if expandedRow === event.artist_show_id && event.song_list && event.song_list.length !== 0}
-					<Table.Row>
-						<Table.Cell colspan={7} class="p-0">
-							<div transition:slide={{ duration: 300, easing: cubicOut }} class="bg-muted p-4">
-								<ul class="space-y-2">
-									{#each event.song_list as song, i}
-										{@const isLast = i + 1 === event.song_list.length}
+			{#if expandedRow === event.artist_show_id && event.songs && event.songs.length !== 0}
+				<Table.Row>
+					<Table.Cell colspan={7} class="p-0">
+						<div transition:slide={{ duration: 300, easing: cubicOut }} class="bg-muted p-4">
+							<ul class="space-y-2">
+								{#each event.songs as song, i}
+									{@const isLast = i + 1 === event.songs.length}
 										<SongItem {song} index={i} {isLast} />
 									{/each}
 								</ul>

@@ -16,15 +16,15 @@
 <Sheet.Root>
 	<Sheet.Trigger class="w-full"
 		><div class="flex flex-col gap-6 rounded-2xl border p-6 md:border-2">
-			<h1 class="text-left text-lg font-bold">{event.venue_name}</h1>
+		<h1 class="text-left text-lg font-bold">{event.venue?.venue_name || 'N/A'}</h1>
 			<div class="flex w-full flex-col gap-2">
 				<div class="flex w-full justify-between">
 					<p class="text-muted-foreground">City</p>
-					<p>{event.city_name}</p>
+					<p>{event.venue?.city?.city_name || 'N/A'}</p>
 				</div>
 				<div class="flex w-full justify-between">
 					<p class="text-muted-foreground">State</p>
-					<p>{event.state}</p>
+					<p>{event.venue?.city?.state || 'N/A'}</p>
 				</div>
 				<div class="flex w-full justify-between">
 					<p class="text-muted-foreground">Date</p>
@@ -39,8 +39,8 @@
 				</div>
 			</div>
 			<div class="flex w-full justify-between">
-				<p class="text-muted-foreground">Number of Songs</p>
-				{event.song_list ? event.song_list.length : '0'}
+			<p class="text-muted-foreground">Number of Songs</p>
+				{event.songs ? event.songs.length : '0'}
 			</div>
 		</div>
 	</Sheet.Trigger>
@@ -49,9 +49,9 @@
 			<Sheet.Title class="text-left text-lg font-bold">Songs List</Sheet.Title>
 		</Sheet.Header>
 		<ul class="space-y-2">
-			{#if event.song_list}
-				{#each event.song_list as song, i}
-					{@const isLast = i + 1 == event.song_list.length ? true : false}
+			{#if event.songs}
+				{#each event.songs as song, i}
+					{@const isLast = i + 1 == event.songs.length ? true : false}
 					<SongItem {song} index={i} {isLast} />
 				{/each}
 			{/if}

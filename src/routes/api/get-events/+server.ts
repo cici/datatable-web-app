@@ -5,9 +5,6 @@ export const POST: RequestHandler = async ({ request }) => {
 
 	const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/shows?page=${selectedPage}&limit=${perPage}`;
 
-	console.log('SERVER');
-	console.log(apiUrl);
-
 	try {
 		const response = await fetch(apiUrl);
 		console.log('before checking response');

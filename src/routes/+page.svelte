@@ -66,8 +66,8 @@
 			}
 			if (response.ok) {
 				const data = await response.json();
-				eventsData = data.results.show_list;
-				totalEvents = data.results.show_list[0].full_count;
+				eventsData = data.results.data;
+				totalEvents = data.results.pagination.total;
 				console.log(eventsData);
 			} else {
 				console.error('Error fetching data:', response);

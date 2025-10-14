@@ -1,16 +1,24 @@
 export interface Song {
 	song_name: string;
 	encore: boolean;
-	artist_name: string | null; // null if it's not a cover song
+	artist_name?: string | null; // Optional, for cover songs
+}
+
+export interface City {
+	city_name: string;
+	state: string;
+}
+
+export interface Venue {
+	venue_name: string;
+	city: City;
 }
 
 export interface Event {
 	artist_show_id: string;
 	event_date: string;
-	venue_name: string;
-	city_name: string;
-	state: string;
-	song_list: Song[];
+	venue?: Venue;
+	songs: Song[];
 }
 
 export const eventsData: Event[] = [
