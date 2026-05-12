@@ -11,8 +11,6 @@ node_modules
 Thumbs.db
 
 # Env
-.env
-.env.*
 !.env.example
 !.env.test
 
@@ -43,3 +41,4 @@ node_modules/
 # Task files
 # tasks.json
 # tasks/ 
+config.bat
